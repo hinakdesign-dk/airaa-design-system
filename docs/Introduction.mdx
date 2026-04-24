@@ -1,0 +1,88 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# Airaa Design System
+
+Welcome to the **Airaa Design System** - a comprehensive, production-ready design system built with Atomic Design principles.
+
+## 🎨 What's Inside
+
+This design system provides:
+
+- **Design Tokens** - Standardized colors, typography, spacing, and more
+- **Atomic Components** - Reusable UI components organized by complexity
+- **TypeScript Support** - Full type safety for all components
+- **Accessibility** - WCAG compliant components
+- **Documentation** - Interactive examples and usage guidelines
+
+## 🚀 Getting Started
+
+### Installation
+
+```bash
+npm install airaa-design-system
+```
+
+### Basic Usage
+
+```tsx
+import { Button, Input, Card } from 'airaa-design-system';
+import 'airaa-design-system/tokens/index.css';
+
+function App() {
+  return (
+    <Card variant="elevated" padding="lg">
+      <Input label="Email" type="email" />
+      <Button variant="primary">Submit</Button>
+    </Card>
+  );
+}
+```
+
+## 📦 Component Categories
+
+### Atoms
+Basic building blocks of the design system:
+- **Button** - Interactive buttons with multiple variants
+- **Input** - Text inputs with validation states
+- **Card** - Container components
+
+### Design Tokens
+All design tokens are available as CSS custom properties:
+- Colors (Primary, Neutral, Semantic)
+- Typography (Fonts, Sizes, Weights)
+- Spacing (Margins, Padding)
+- Border Radius
+
+## 🎯 Design Principles
+
+### Consistency
+All components follow the same design language and use shared design tokens.
+
+### Accessibility
+Components are built with accessibility in mind, following WCAG guidelines.
+
+### Flexibility
+Components are highly customizable through props and CSS custom properties.
+
+### Performance
+Tree-shakeable exports mean you only bundle what you use.
+
+## 📚 Explore Components
+
+Use the sidebar to explore all available components. Each component page includes:
+- Interactive playground
+- Available props documentation
+- Usage examples
+- Accessibility guidelines
+
+## 🔗 Links
+
+- [Figma Design System](https://www.figma.com/design/u5IZqIkHYdnKlrCnoYvmIs/Airaa-Design-System---Atomic-Design---UI-Kit-Library)
+- [GitHub Repository](#)
+- [Documentation](./docs/)
+
+---
+
+**Happy Building! 🎉**
