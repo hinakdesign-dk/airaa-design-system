@@ -2,15 +2,23 @@
 
 A comprehensive, production-ready design system built with Atomic Design principles. This library provides a complete set of reusable UI components, design tokens, and documentation for building consistent user interfaces.
 
+[![Storybook](https://img.shields.io/badge/Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)](https://YOUR_USERNAME.github.io/airaa-design-system/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://YOUR_USERNAME.github.io/airaa-design-system/)
+
+## 🔗 Live Demo
+
+**[View Live Storybook →](https://YOUR_USERNAME.github.io/airaa-design-system/)**
+
 ## Features
 
 - 🎨 **Design Tokens** - Standardized colors, typography, spacing, and more
 - 🧩 **Atomic Design** - Components organized by atoms, molecules, and organisms
 - ⚛️ **React + TypeScript** - Type-safe components with full TypeScript support
-- 📚 **Storybook** - Interactive component documentation
+- 📚 **Storybook** - Interactive component documentation deployed on GitHub Pages
 - 🎯 **Accessibility** - WCAG compliant components
 - 🚀 **Tree-shakeable** - Import only what you need
 - 💅 **CSS Variables** - Easy theming and customization
+- 🤖 **CI/CD** - Automated deployment via GitHub Actions
 
 ## Installation
 
@@ -85,12 +93,25 @@ npm run build:tokens
 # Build components
 npm run build
 
-# Run Storybook
+# Run Storybook locally
 npm run storybook
+# Opens at http://localhost:6006
+
+# Build Storybook for deployment
+npm run build-storybook
 
 # Run tests
 npm test
 ```
+
+### Storybook Development
+
+Your Storybook is automatically deployed to GitHub Pages when you push to the `main` branch. The deployment workflow:
+
+1. Runs on every push to `main`
+2. Builds Storybook
+3. Deploys to GitHub Pages
+4. Available at: `https://YOUR_USERNAME.github.io/airaa-design-system/`
 
 ### Project Structure
 
@@ -140,6 +161,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Links
 
-- [Figma Design System](https://www.figma.com/design/u5IZqIkHYdnKlrCnoYvmIs/Airaa-Design-System---Atomic-Design---UI-Kit-Library)
-- [Documentation](./docs/)
-- [Storybook](./storybook-static/)
+- 📖 [Live Storybook](https://YOUR_USERNAME.github.io/airaa-design-system/) - Interactive component documentation
+- 🎨 [Figma Design System](https://www.figma.com/design/u5IZqIkHYdnKlrCnoYvmIs/Airaa-Design-System---Atomic-Design---UI-Kit-Library) - Source design file
+- 📚 [Documentation](./docs/) - Additional guides and references
+- 🐙 [GitHub Repository](https://github.com/YOUR_USERNAME/airaa-design-system) - Source code
