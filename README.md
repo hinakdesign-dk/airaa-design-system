@@ -2,12 +2,12 @@
 
 A comprehensive, production-ready design system built with Atomic Design principles. This library provides a complete set of reusable UI components, design tokens, and documentation for building consistent user interfaces.
 
-[![Storybook](https://img.shields.io/badge/Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)](https://YOUR_USERNAME.github.io/airaa-design-system/)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://YOUR_USERNAME.github.io/airaa-design-system/)
+[![Storybook](https://img.shields.io/badge/Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white)](https://hinakdesign-dk.github.io/airaa-design-system/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://hinakdesign-dk.github.io/airaa-design-system/)
 
 ## 🔗 Live Demo
 
-**[View Live Storybook →](https://YOUR_USERNAME.github.io/airaa-design-system/)**
+**[View Live Storybook →](https://hinakdesign-dk.github.io/airaa-design-system/)**
 
 ## Features
 
@@ -111,7 +111,7 @@ Your Storybook is automatically deployed to GitHub Pages when you push to the `m
 1. Runs on every push to `main`
 2. Builds Storybook
 3. Deploys to GitHub Pages
-4. Available at: `https://YOUR_USERNAME.github.io/airaa-design-system/`
+4. Available at: `https://hinakdesign-dk.github.io/airaa-design-system/`
 
 ### Project Structure
 
@@ -161,7 +161,7 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Links
 
-- 📖 [Live Storybook](https://YOUR_USERNAME.github.io/airaa-design-system/) - Interactive component documentation
+- 📖 [Live Storybook](https://hinakdesign-dk.github.io/airaa-design-system/) - Interactive component documentation
 - 🎨 [Figma Design System](https://www.figma.com/design/u5IZqIkHYdnKlrCnoYvmIs/Airaa-Design-System---Atomic-Design---UI-Kit-Library) - Source design file
 - 📚 [Documentation](./docs/) - Additional guides and references
-- 🐙 [GitHub Repository](https://github.com/YOUR_USERNAME/airaa-design-system) - Source code
+- 🐙 [GitHub Repository](https://github.com/hinakdesign-dk/airaa-design-system) - Source code
