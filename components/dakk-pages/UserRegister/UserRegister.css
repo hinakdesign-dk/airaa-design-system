@@ -43,7 +43,15 @@
 .dakk-user-register__card {
   width: 604px;
   min-height: 730px;
-  background: var(--dakk-bg-grey-800);
+  /* Linear gradient — primary/dark (top) → background/grey-800 (bottom).
+     The footer band keeps its own solid var(--dakk-bg-grey) background,
+     so the gradient is only visible across the card body above the
+     footer. */
+  background: linear-gradient(
+    180deg,
+    var(--dakk-primary-dark) 0%,
+    var(--dakk-bg-grey-800) 100%
+  );
   border-radius: var(--dakk-radius);
   /* custom/dialog effect tokens */
   box-shadow:
