@@ -35,7 +35,11 @@
   box-sizing: border-box;
 }
 
-/* Card / dialog */
+/* Card / dialog — locked at 604 × 730 for BOTH variants (Default and
+   OTP Verify) per the design spec. The OTP variant has shorter content
+   than the registration form, so the grey-800 card background simply
+   shows through the unused vertical space between the heading block
+   and the footer band — that empty space is intentional. */
 .dakk-user-register__card {
   width: 604px;
   min-height: 730px;
@@ -50,19 +54,14 @@
   overflow: hidden;
 }
 
-/* The OTP variant has much shorter content than the registration form
-   (no fields), so we drop the 730 px lock and let the card auto-size.
-   This keeps the footer band sitting flush against the bottom of the
-   card with its own 16 px padding-bottom — instead of leaving ~220 px
-   of empty grey space below the SIGN IN row. */
-.dakk-user-register--otp .dakk-user-register__card {
-  min-height: 0;
-}
-
 .dakk-user-register__body {
   padding: 24px 30px 30px;
   display: flex;
   flex-direction: column;
+  /* Grow to fill the card so the footer band always sits flush against
+     the bottom of the 730 px card — important for the OTP variant where
+     the body content is much shorter than the full registration form. */
+  flex: 1 1 auto;
 }
 
 /* DAKK logo */
