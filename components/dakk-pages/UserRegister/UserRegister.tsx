@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Textfield } from '../../atoms/Textfield/Textfield';
 import { Button } from '../../atoms/Button/Button';
 import './UserRegister.css';
@@ -121,7 +121,53 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
   const [email, setEmail] = useState(emailProp ?? '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [otp, setOtp] = useState('');
+  const [otpDigits, setOtpDigits] = useState<string[]>(() => Array(6).fill(''));
+  const otpRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const otp = otpDigits.join('');
+
+  const handleOtpChange = (index: number, raw: string) => {
+    const sanitized = raw.replace(/[^0-9]/g, '');
+
+    if (sanitized.length > 1) {
+      const next = [...otpDigits];
+      for (let i = 0; i < 6; i += 1) {
+        next[i] = sanitized[i] ?? '';
+      }
+      setOtpDigits(next);
+      const focusIndex = Math.min(sanitized.length, 5);
+      otpRefs.current[focusIndex]?.focus();
+      return;
+    }
+
+    const next = [...otpDigits];
+    next[index] = sanitized;
+    setOtpDigits(next);
+    if (sanitized && index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    } else if (e.key === 'ArrowLeft' && index > 0) {
+      otpRefs.current[index - 1]?.focus();
+    } else if (e.key === 'ArrowRight' && index < 5) {
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+    if (!pasted) return;
+    const next = Array(6).fill('');
+    for (let i = 0; i < pasted.length; i += 1) {
+      next[i] = pasted[i];
+    }
+    setOtpDigits(next);
+    otpRefs.current[Math.min(pasted.length, 5)]?.focus();
+  };
 
   const phoneCountryEntry = COUNTRY_LIST.find((c) => c.value === phoneCountry) ?? COUNTRY_LIST[0];
   const countryEntry = COUNTRY_LIST.find((c) => c.value === country) ?? COUNTRY_LIST[0];
@@ -185,15 +231,31 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
               <p className="dakk-user-register__otp-sent-to">
                 Code was sent to {emailProp ?? 'hina.life@gmail.com'}
               </p>
-              <div className="dakk-user-register__otp-field">
-                <Textfield
-                  type="outlined"
-                  variant="otp"
-                  size="normal"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  aria-label="One-time code"
-                />
+              <div
+                className="dakk-user-register__otp-field"
+                role="group"
+                aria-label="One-time code, 6 digits"
+              >
+                {otpDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => {
+                      otpRefs.current[index] = el;
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={1}
+                    pattern="[0-9]*"
+                    className="dakk-user-register__otp-input"
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    onPaste={handleOtpPaste}
+                    onFocus={(e) => e.target.select()}
+                    aria-label={`Digit ${index + 1} of 6`}
+                  />
+                ))}
               </div>
             </div>
           ) : (

@@ -50,6 +50,15 @@
   overflow: hidden;
 }
 
+/* The OTP variant has much shorter content than the registration form
+   (no fields), so we drop the 730 px lock and let the card auto-size.
+   This keeps the footer band sitting flush against the bottom of the
+   card with its own 16 px padding-bottom — instead of leaving ~220 px
+   of empty grey space below the SIGN IN row. */
+.dakk-user-register--otp .dakk-user-register__card {
+  min-height: 0;
+}
+
 .dakk-user-register__body {
   padding: 24px 30px 30px;
   display: flex;
@@ -160,13 +169,16 @@
 }
 
 /* OTP variant body — 132 px gap from heading-block to "Code was sent…" text,
-   24 px gap to the OTP field, OTP field stretched across the inner width. */
+   24 px gap to the OTP field, OTP field stretched across the inner width.
+   Use align-items: stretch (default) so the grid below resolves against the
+   full 544 px inner width; the "Code was sent…" text is centered via
+   text-align on its own element. */
 .dakk-user-register__otp-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding-top: 132px;
   gap: 24px;
+  width: 100%;
 }
 
 .dakk-user-register__otp-sent-to {
@@ -181,14 +193,52 @@
   text-align: center;
 }
 
+/* 6-digit OTP input — outlined boxes, primary stroke, 8 px radius,
+   centered single-character input each. Total inner width: 544 px,
+   so 6 boxes auto-fit with 12 px gaps. minmax(0, 1fr) overrides the
+   default <input size=20> auto minimum that would otherwise blow the
+   columns past the card. */
 .dakk-user-register__otp-field {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.dakk-user-register__otp-field .airaa-textfield {
+.dakk-user-register__otp-input {
   width: 100%;
+  min-width: 0;
+  height: 56px;
+  background: transparent;
+  color: var(--dakk-text-white);
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  caret-color: var(--dakk-primary-main);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.dakk-user-register__otp-input::-webkit-outer-spin-button,
+.dakk-user-register__otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dakk-user-register__otp-input:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register__otp-input:focus {
+  border-color: var(--dakk-primary-main);
+  box-shadow: 0 0 0 2px rgba(0, 167, 111, 0.25);
 }
 
 /* Form fields */
@@ -444,7 +494,9 @@
 /* Footer */
 .dakk-user-register__footer {
   background: var(--dakk-bg-grey);
-  padding: 30px 30px 24px;
+  /* 30 px top, 30 px sides, 16 px bottom — keeps the SIGN IN row 16 px
+     above the card's bottom edge. */
+  padding: 30px 30px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
