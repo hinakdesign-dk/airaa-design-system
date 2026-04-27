@@ -73,7 +73,7 @@ const backArrowIcon = (
   </svg>
 );
 
-export type UserRegisterVariant = 'register' | 'otp';
+export type UserRegisterVariant = 'register' | 'otp' | 'success';
 
 export interface UserRegisterProps {
   variant?: UserRegisterVariant;
@@ -83,6 +83,12 @@ export interface UserRegisterProps {
   onVerify?: (otp: string) => void;
   onBack?: () => void;
   onSignIn?: () => void;
+  /** Success variant — primary CTA ("Go To Dashboard") */
+  onGoToDashboard?: (data: { email: string; password: string }) => void;
+  /** Success variant — "CLICK TO RESET" link */
+  onResetPassword?: () => void;
+  /** Success variant — "Need a new account? REGISTER" link */
+  onRegisterRedirect?: () => void;
   className?: string;
 }
 
@@ -107,9 +113,14 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
   onVerify,
   onBack,
   onSignIn,
+  onGoToDashboard,
+  onResetPassword,
+  onRegisterRedirect,
   className,
 }) => {
   const isOtp = variant === 'otp';
+  const isSuccess = variant === 'success';
+  const showBackButton = isOtp || isSuccess;
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -178,6 +189,10 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
       onVerify?.(otp);
       return;
     }
+    if (isSuccess) {
+      onGoToDashboard?.({ email, password });
+      return;
+    }
     onRegister?.({
       firstName,
       lastName,
@@ -199,7 +214,7 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
       <form className="dakk-user-register__card" onSubmit={handleSubmit}>
         <div className="dakk-user-register__body">
           <div className="dakk-user-register__logo-row">
-            {isOtp && (
+            {showBackButton && (
               <button
                 type="button"
                 className="dakk-user-register__back-btn"
@@ -217,16 +232,56 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
 
           <div className="dakk-user-register__heading-block">
             <h1 className="dakk-user-register__title">
-              {isOtp ? 'Verify your Email' : 'Register to Begin'}
+              {isSuccess
+                ? 'Congratulations! You are all set'
+                : isOtp
+                  ? 'Verify your Email'
+                  : 'Register to Begin'}
             </h1>
             <p className="dakk-user-register__subtitle">
-              {isOtp
-                ? 'Enter the 6-digit code to complete process of account creation'
-                : "Create your account, choose your LLM provider, and you're ready to use DAKK Assistant"}
+              {isSuccess
+                ? 'To start exploring, Login using your credentials'
+                : isOtp
+                  ? 'Enter the 6-digit code to complete process of account creation'
+                  : "Create your account, choose your LLM provider, and you're ready to use DAKK Assistant"}
             </p>
           </div>
 
-          {isOtp ? (
+          {isSuccess ? (
+            <div className="dakk-user-register__success-block">
+              <div className="dakk-user-register__success-fields">
+                <Textfield
+                  type="outlined"
+                  size="normal"
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  fullWidth
+                />
+                <Textfield
+                  type="outlined"
+                  variant="password"
+                  size="normal"
+                  label="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  fullWidth
+                />
+              </div>
+              <p className="dakk-user-register__forgot-row">
+                <span className="dakk-user-register__forgot-text">
+                  Forgot Password or Username?{' '}
+                </span>
+                <button
+                  type="button"
+                  className="dakk-user-register__forgot-link"
+                  onClick={onResetPassword}
+                >
+                  CLICK TO RESET
+                </button>
+              </p>
+            </div>
+          ) : isOtp ? (
             <div className="dakk-user-register__otp-block">
               <p className="dakk-user-register__otp-sent-to">
                 Code was sent to {emailProp ?? 'hina.life@gmail.com'}
@@ -413,17 +468,17 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
               size="medium"
               className="dakk-user-register__action-btn"
             >
-              {isOtp ? 'Verify' : 'Register'}
+              {isSuccess ? 'Go To Dashboard' : isOtp ? 'Verify' : 'Register'}
             </Button>
           </div>
           <p className="dakk-user-register__signin">
-            Already have an account?{' '}
+            {isSuccess ? 'Need a new account?' : 'Already have an account?'}{' '}
             <button
               type="button"
               className="dakk-user-register__signin-link"
-              onClick={onSignIn}
+              onClick={isSuccess ? onRegisterRedirect : onSignIn}
             >
-              SIGN IN
+              {isSuccess ? 'REGISTER' : 'SIGN IN'}
             </button>
           </p>
         </div>

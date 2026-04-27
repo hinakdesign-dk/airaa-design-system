@@ -54,3 +54,23 @@ export const OTPVerify: Story = {
     },
   },
 };
+
+export const SuccessVerification: Story = {
+  name: 'Success Verification',
+  args: {
+    variant: 'success',
+    onCancel: () => console.log('Cancel clicked'),
+    onGoToDashboard: (data) => console.log('Go To Dashboard submitted', data),
+    onResetPassword: () => console.log('Reset password clicked'),
+    onRegisterRedirect: () => console.log('Register link clicked'),
+    onBack: () => console.log('Back clicked'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Success Verification state of the User Register page. Reuses the OTP variant\'s 604 × 730 card and back-button + DAKK header. Replaces the body with a login form (Email + Password) and a "Forgot Password or Username? CLICK TO RESET" link. Footer primary CTA becomes "Go To Dashboard" and the sign-in line becomes "Need a new account? REGISTER".',
+      },
+    },
+  },
+};

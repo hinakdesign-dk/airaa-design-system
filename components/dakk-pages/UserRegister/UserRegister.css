@@ -64,16 +64,24 @@
   flex: 1 1 auto;
 }
 
-/* For the OTP variant we collapse the body's horizontal padding and let
-   each direct child (logo-row, heading-block, otp-block) declare its
-   own 30 px left/right padding. This makes the 30 px back-button
-   alignment a single, explicit declaration on .dakk-user-register__logo-row
-   rather than something inherited via body padding. The Default
-   registration story keeps its body padding because all of its children
-   share the same 30 px offset. */
-.dakk-user-register--otp .dakk-user-register__body {
+/* For the OTP and Success variants we collapse the body's horizontal
+   padding and let each direct child (logo-row, heading-block,
+   otp-block, success-block) declare its own 30 px left/right padding.
+   This makes the 30 px back-button alignment a single, explicit
+   declaration on .dakk-user-register__logo-row rather than something
+   inherited via body padding. The Default registration story keeps its
+   body padding because all of its children share the same 30 px offset. */
+.dakk-user-register--otp .dakk-user-register__body,
+.dakk-user-register--success .dakk-user-register__body {
   padding-left: 0;
   padding-right: 0;
+}
+
+/* Success variant — zero the body's padding-bottom too so the 199 px
+   gap below the forgot-row is owned entirely by the success-block's
+   own padding-bottom. The body still flex-grows to fill the card. */
+.dakk-user-register--success .dakk-user-register__body {
+  padding-bottom: 0;
 }
 
 /* DAKK logo */
@@ -85,15 +93,17 @@
   position: relative;
 }
 
-/* OTP variant — back button left-aligned to 30 px from the card edge,
-   DAKK logo absolutely centered behind it. */
-.dakk-user-register--otp .dakk-user-register__logo-row {
+/* OTP and Success variants — back button left-aligned to 30 px from
+   the card edge, DAKK logo absolutely centered behind it. */
+.dakk-user-register--otp .dakk-user-register__logo-row,
+.dakk-user-register--success .dakk-user-register__logo-row {
   padding: 0 30px;
   justify-content: flex-start;
   align-items: center;
 }
 
-.dakk-user-register--otp .dakk-user-register__logo {
+.dakk-user-register--otp .dakk-user-register__logo,
+.dakk-user-register--success .dakk-user-register__logo {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -151,11 +161,13 @@
   margin-bottom: 16px;
 }
 
-/* In the OTP variant the spacing below the heading is owned by
-   __otp-block (132 px), so collapse the heading's own bottom margin.
-   Body's horizontal padding is zeroed for OTP, so reapply the 30 px
-   offset on the heading-block itself. */
-.dakk-user-register--otp .dakk-user-register__heading-block {
+/* In the OTP and Success variants the spacing below the heading is
+   owned by the next block (132 px in OTP, 42 px in Success), so we
+   collapse the heading's own bottom margin. Body's horizontal padding
+   is zeroed for these variants, so we reapply the 30 px offset on the
+   heading-block itself. */
+.dakk-user-register--otp .dakk-user-register__heading-block,
+.dakk-user-register--success .dakk-user-register__heading-block {
   margin-bottom: 0;
   padding-left: 30px;
   padding-right: 30px;
@@ -259,6 +271,79 @@
 .dakk-user-register__otp-input:focus {
   border-color: var(--dakk-primary-main);
   box-shadow: 0 0 0 2px rgba(0, 167, 111, 0.25);
+}
+
+/* ───────── Success Verification variant ─────────
+   Layout under the heading-block:
+     42 px (padding-top) → Email field
+     16 px (gap)         → Password field
+     16 px (gap)         → Forgot-password row
+     199 px (padding-bottom) reserves the gap to the footer band
+
+   The block is locked at the same 544 px content width as the OTP
+   block and centered (auto margins) inside the now-604 px-wide body
+   for the success variant. */
+.dakk-user-register__success-block {
+  display: flex;
+  flex-direction: column;
+  padding-top: 42px;
+  padding-bottom: 199px;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.dakk-user-register__success-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dakk-user-register__success-fields .airaa-textfield {
+  width: 100%;
+}
+
+/* Forgot password row — single line:
+     "Forgot Password or Username? "  → body-2, text/white
+     "CLICK TO RESET"                 → overline, text/info */
+.dakk-user-register__forgot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  text-align: center;
+}
+
+.dakk-user-register__forgot-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__forgot-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dakk-text-info);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.dakk-user-register__forgot-link:hover {
+  color: var(--dakk-text-info);
+  text-decoration: underline;
 }
 
 /* Form fields */
