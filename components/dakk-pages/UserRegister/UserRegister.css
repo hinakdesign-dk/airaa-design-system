@@ -168,16 +168,18 @@
 }
 
 /* OTP variant body — 132 px gap from heading-block to "Code was sent…" text,
-   24 px gap to the OTP field, OTP field stretched across the inner width.
-   Use align-items: stretch (default) so the grid below resolves against the
-   full 544 px inner width; the "Code was sent…" text is centered via
-   text-align on its own element. */
+   24 px gap to the OTP field. The whole OTP block is locked to 544 px
+   (the inner width of the 604 px card after 30 px side padding) and
+   centered. The "Code was sent…" text is centered via text-align on
+   its own element. */
 .dakk-user-register__otp-block {
   display: flex;
   flex-direction: column;
   padding-top: 132px;
   gap: 24px;
-  width: 100%;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .dakk-user-register__otp-sent-to {
@@ -193,12 +195,14 @@
 }
 
 /* 6-digit OTP input — outlined boxes, primary stroke, 8 px radius,
-   centered single-character input each. Total inner width: 544 px,
-   so 6 boxes auto-fit with 12 px gaps. minmax(0, 1fr) overrides the
-   default <input size=20> auto minimum that would otherwise blow the
-   columns past the card. */
+   centered single-character input each. The grid is locked to the same
+   544 px width as its parent .dakk-user-register__otp-block, so 6 boxes
+   auto-fit at exactly (544 - 5×12) / 6 ≈ 80.67 px each.
+   minmax(0, 1fr) overrides the default <input size=20> auto minimum
+   that would otherwise blow the columns past the 544 px width. */
 .dakk-user-register__otp-field {
-  width: 100%;
+  width: 544px;
+  max-width: 100%;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
