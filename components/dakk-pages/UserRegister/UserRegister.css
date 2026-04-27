@@ -1,0 +1,834 @@
+/* DAKK Pages — User Register
+ * Tokens used:
+ *   background/grey-800 #1C252E
+ *   background/grey      #141A21
+ *   primary/main         #00A76F
+ *   text/white           #FFFFFF
+ *   icon/grey-300        #DFE3E8
+ *   custom/dialog effect (drop shadows)
+ */
+
+.dakk-user-register {
+  --dakk-bg-grey-800: #1c252e;
+  --dakk-bg-grey: #141a21;
+  --dakk-primary-main: #00a76f;
+  --dakk-primary-dark: #007867;
+  --dakk-text-white: #ffffff;
+  --dakk-text-info: #1f8fff;
+  --dakk-icon-grey-300: #dfe3e8;
+  --dakk-grey-700: #454f5b;
+  --dakk-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #000000;
+  font-family: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.dakk-user-register *,
+.dakk-user-register *::before,
+.dakk-user-register *::after {
+  box-sizing: border-box;
+}
+
+/* Card / dialog — locked at 604 × 730 for BOTH variants (Default and
+   OTP Verify) per the design spec. The OTP variant has shorter content
+   than the registration form, so the grey-800 card background simply
+   shows through the unused vertical space between the heading block
+   and the footer band — that empty space is intentional. */
+/* Animated gradient top-color custom property. @property is required so
+   that color values can interpolate smoothly between keyframes; without
+   it CSS would jump between stops instead of fading. */
+@property --dakk-card-gradient-top {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #00150E;
+}
+
+.dakk-user-register__card {
+  width: 604px;
+  min-height: 730px;
+  /* Linear gradient — animated top color → background/grey-800 (bottom).
+     The footer band keeps its own solid var(--dakk-bg-grey) background,
+     so the gradient is only visible across the card body above the
+     footer. */
+  --dakk-card-gradient-top: #00150E;
+  background: linear-gradient(
+    180deg,
+    var(--dakk-card-gradient-top) 0%,
+    var(--dakk-bg-grey-800) 100%
+  );
+  /* Micro-animation: gently breathe the top color between #00150E and
+     a slightly lifted #003D28 over 9 s, easing both ways and reversing
+     direction so it never snaps. */
+  animation: dakk-card-gradient-breathe 9s ease-in-out infinite alternate;
+  border-radius: var(--dakk-radius);
+  /* custom/dialog effect tokens */
+  box-shadow:
+    -40px 40px 80px -8px rgba(0, 0, 0, 0.24),
+    0 0 2px 0 rgba(145, 158, 171, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes dakk-card-gradient-breathe {
+  0% {
+    --dakk-card-gradient-top: #00150E;
+  }
+  100% {
+    --dakk-card-gradient-top: #003D28;
+  }
+}
+
+/* Honor reduced-motion preferences — no animated gradient breathing. */
+@media (prefers-reduced-motion: reduce) {
+  .dakk-user-register__card {
+    animation: none;
+  }
+}
+
+.dakk-user-register__body {
+  padding: 24px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  /* Grow to fill the card so the footer band always sits flush against
+     the bottom of the 730 px card — important for the OTP variant where
+     the body content is much shorter than the full registration form. */
+  flex: 1 1 auto;
+}
+
+/* For the OTP and Success variants we collapse the body's horizontal
+   padding and let each direct child (logo-row, heading-block,
+   otp-block, success-block) declare its own 30 px left/right padding.
+   This makes the 30 px back-button alignment a single, explicit
+   declaration on .dakk-user-register__logo-row rather than something
+   inherited via body padding. The Default registration story keeps its
+   body padding because all of its children share the same 30 px offset. */
+.dakk-user-register--otp .dakk-user-register__body,
+.dakk-user-register--success .dakk-user-register__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Success variant — zero the body's padding-bottom too so the 199 px
+   gap below the forgot-row is owned entirely by the success-block's
+   own padding-bottom. The body still flex-grows to fill the card. */
+.dakk-user-register--success .dakk-user-register__body {
+  padding-bottom: 0;
+}
+
+/* DAKK logo */
+.dakk-user-register__logo-row {
+  display: flex;
+  justify-content: center;
+  padding: 0 270px;
+  margin-bottom: 64px;
+  position: relative;
+}
+
+/* OTP and Success variants — back button left-aligned to 30 px from
+   the card edge, DAKK logo absolutely centered behind it. */
+.dakk-user-register--otp .dakk-user-register__logo-row,
+.dakk-user-register--success .dakk-user-register__logo-row {
+  padding: 0 30px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dakk-user-register--otp .dakk-user-register__logo,
+.dakk-user-register--success .dakk-user-register__logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Header back button — small, text-button styling with grey fill,
+   primary 1 px stroke, white text/icon, 8 px radius. */
+.dakk-user-register__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  height: 28px;
+  background: var(--dakk-bg-grey);
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  color: var(--dakk-text-white);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.dakk-user-register__back-btn:hover {
+  background: rgba(0, 167, 111, 0.08);
+  border-color: var(--dakk-primary-dark);
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__back-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__logo {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--dakk-text-white);
+  white-space: nowrap;
+}
+
+.dakk-user-register__logo-accent {
+  color: var(--dakk-primary-main);
+}
+
+/* Heading block */
+.dakk-user-register__heading-block {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* In the OTP and Success variants the spacing below the heading is
+   owned by the next block (132 px in OTP, 42 px in Success), so we
+   collapse the heading's own bottom margin. Body's horizontal padding
+   is zeroed for these variants, so we reapply the 30 px offset on the
+   heading-block itself. */
+.dakk-user-register--otp .dakk-user-register__heading-block,
+.dakk-user-register--success .dakk-user-register__heading-block {
+  margin-bottom: 0;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* Email-body variant — heading still uses the default body padding so
+   we only need to collapse the bottom margin (the 50 px gap below is
+   owned by __email-body-block's padding-top). */
+.dakk-user-register--email-body .dakk-user-register__heading-block {
+  margin-bottom: 0;
+}
+
+.dakk-user-register__title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
+  color: var(--dakk-text-white);
+  margin: 0 0 8px 0;
+  letter-spacing: 0;
+}
+
+.dakk-user-register__subtitle {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--dakk-icon-grey-300);
+  margin: 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* OTP variant body — 132 px gap from heading-block to "Code was sent…" text,
+   24 px gap to the OTP field. The whole OTP block is locked to 544 px
+   (the inner width of the 604 px card after 30 px side padding) and
+   centered. The "Code was sent…" text is centered via text-align on
+   its own element. */
+.dakk-user-register__otp-block {
+  display: flex;
+  flex-direction: column;
+  padding-top: 132px;
+  gap: 24px;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.dakk-user-register__otp-sent-to {
+  font-family: 'Public Sans', sans-serif;
+  /* Subtitle 1 = 16 / 24, semibold */
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--dakk-text-white);
+  margin: 0;
+  text-align: center;
+}
+
+/* 6-digit OTP input — outlined boxes, primary stroke, 8 px radius,
+   centered single-character input each. The grid is locked to the same
+   544 px width as its parent .dakk-user-register__otp-block, so 6 boxes
+   auto-fit at exactly (544 - 5×12) / 6 ≈ 80.67 px each.
+   minmax(0, 1fr) overrides the default <input size=20> auto minimum
+   that would otherwise blow the columns past the 544 px width. */
+.dakk-user-register__otp-field {
+  width: 544px;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dakk-user-register__otp-input {
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  background: transparent;
+  color: var(--dakk-text-white);
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  caret-color: var(--dakk-primary-main);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  padding: 0;
+  -moz-appearance: textfield;
+}
+
+.dakk-user-register__otp-input::-webkit-outer-spin-button,
+.dakk-user-register__otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dakk-user-register__otp-input:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register__otp-input:focus {
+  border-color: var(--dakk-primary-main);
+  box-shadow: 0 0 0 2px rgba(0, 167, 111, 0.25);
+}
+
+/* ───────── Success Verification variant ─────────
+   Layout under the heading-block:
+     42 px (padding-top) → Email field
+     16 px (gap)         → Password field
+     16 px (gap)         → Forgot-password row
+     199 px (padding-bottom) reserves the gap to the footer band
+
+   The block is locked at the same 544 px content width as the OTP
+   block and centered (auto margins) inside the now-604 px-wide body
+   for the success variant. */
+.dakk-user-register__success-block {
+  display: flex;
+  flex-direction: column;
+  padding-top: 42px;
+  padding-bottom: 199px;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.dakk-user-register__success-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Email + Password are both locked to 400 px and horizontally
+   center-aligned to the base card. The success-fields wrapper still
+   spans the full 544 px success-block width, so align-self: center on
+   each field places them at (604 − 400) / 2 = 102 px from each card
+   edge. The forgot-row sibling below keeps its own 30 px left-edge
+   alignment. */
+.dakk-user-register__success-fields .airaa-textfield {
+  width: 400px;
+  align-self: center;
+}
+
+/* Forgot password row — single line:
+     "Forgot Password or Username? "  → body-2, text/white
+     "CLICK TO RESET"                 → overline, text/info
+
+   Aligned to the Password textfield: same 400 px width and
+   align-self: center as the field above, with internal content
+   left-aligned. 12 px sits between the Password field and this row. */
+.dakk-user-register__forgot-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 400px;
+  align-self: center;
+  margin: 12px 0 0;
+  padding: 0;
+  text-align: left;
+}
+
+.dakk-user-register__forgot-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__forgot-link {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--dakk-text-info);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.dakk-user-register__forgot-link:hover {
+  color: var(--dakk-text-info);
+  text-decoration: underline;
+}
+
+/* ───────── Email Body Template variant ─────────
+   Layout under the heading-block:
+     50 px (padding-top) → "Copy Code" text-button
+     16 px (gap)         → 6 read-only OTP boxes (pre-filled 1..6)
+     24 px (gap)         → disclaimer body-2 paragraph
+
+   No footer band on this variant. The card body's flex: 1 1 auto
+   absorbs the rest of the 730 px so the gradient simply fills the
+   space below the disclaimer. */
+.dakk-user-register__email-body-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  gap: 16px;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* "Copy Code" text-button — borderless, primary-main with icon. Sits
+   above the OTP boxes; hover deepens to primary-dark. */
+.dakk-user-register__copy-code-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--dakk-primary-main);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.dakk-user-register__copy-code-btn:hover {
+  color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register__copy-code-icon {
+  display: inline-flex;
+  align-items: center;
+  color: currentColor;
+}
+
+/* Email-body OTP grid — same 6-box look as OTP Verify story. The
+   __email-otp-field modifier reserves the option to diverge later if
+   needed (e.g. read-only visual styling) without touching __otp-field. */
+.dakk-user-register__email-otp-field {
+  margin-top: 0;
+}
+
+.dakk-user-register__email-otp-field .dakk-user-register__otp-input {
+  caret-color: transparent;
+  cursor: default;
+}
+
+.dakk-user-register__email-otp-field .dakk-user-register__otp-input:focus {
+  /* Read-only digits — no focus ring */
+  box-shadow: none;
+}
+
+/* Disclaimer paragraph — body-2, icon/grey-300, ~480 px wide so the
+   two-line break feels intentional. Sits 24 px below the OTP boxes
+   (overrides the email-body-block's 16 px gap via margin-top). */
+.dakk-user-register__email-disclaimer {
+  margin: 8px 0 0; /* 16 px gap (block gap) + 8 px (this margin-top) = 24 px */
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--dakk-icon-grey-300);
+  max-width: 480px;
+  text-align: center;
+}
+
+/* Form fields */
+.dakk-user-register__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dakk-user-register__row {
+  display: grid;
+  grid-template-columns: 260px 260px;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.dakk-user-register__row--single {
+  grid-template-columns: 1fr;
+}
+
+.dakk-user-register__row > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---- Dark theme overrides for atomic components inside this page ---- */
+
+/* Textfield — outlined, dark theme, primary border, 8 px radius
+   (corner-radius token alignment: --border-radius-8) */
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input {
+  background: transparent;
+  color: var(--dakk-text-white);
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+}
+
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register .airaa-textfield--outlined.airaa-textfield--focused .airaa-textfield__input,
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input:focus {
+  border-color: var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  box-shadow: 0 0 0 1px var(--dakk-primary-main);
+  /* override base CSS that grows padding by 1px on focus and resets radius */
+  padding: 1rem 0.875rem;
+}
+
+.dakk-user-register .airaa-textfield__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dakk-user-register .airaa-textfield__label {
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+}
+
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__label--focused,
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__label--filled {
+  background: var(--dakk-bg-grey-800);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0 4px;
+}
+
+.dakk-user-register .airaa-textfield--outlined.airaa-textfield--focused .airaa-textfield__label {
+  color: var(--dakk-primary-main);
+}
+
+/* Disable the global ".airaa-textfield:hover .airaa-textfield__label"
+   rule which forces the label to neutral-900 (renders ~text/white in dark mode). */
+.dakk-user-register .airaa-textfield:not(.airaa-textfield--disabled):hover .airaa-textfield__label {
+  color: rgba(255, 255, 255, 0.7);
+}
+.dakk-user-register .airaa-textfield:not(.airaa-textfield--disabled):hover .airaa-textfield__label--focused {
+  color: var(--dakk-primary-main);
+}
+
+/* Eye / password toggle — primary token, hover stays primary-dark (NOT white) */
+.dakk-user-register .airaa-textfield__password-toggle {
+  color: var(--dakk-primary-main);
+  opacity: 1;
+}
+.dakk-user-register .airaa-textfield__password-toggle:hover {
+  color: var(--dakk-primary-dark);
+}
+
+/* Date of Birth — calendar icon */
+.dakk-user-register__cal-icon {
+  display: inline-flex;
+  color: var(--dakk-primary-main);
+  pointer-events: none;
+}
+
+
+/* ---- Custom Country / Phone field (rebuilt to match Figma 3111:3565) ---- */
+.dakk-country-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dakk-country-field__label {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  z-index: 2;
+  padding: 0 4px;
+  background: var(--dakk-bg-grey-800);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+
+.dakk-country-field__shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 12px 16px;
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  background: transparent;
+  transition: border-color 0.2s ease;
+}
+
+.dakk-country-field__shell:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-country-field__shell:focus-within {
+  border-color: var(--dakk-primary-main);
+  box-shadow: 0 0 0 1px var(--dakk-primary-main);
+}
+
+.dakk-country-field__flag-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dakk-country-field__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 16px;
+  font-size: 18px;
+  line-height: 1;
+  overflow: hidden;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dakk-country-field__flag--lead {
+  margin-right: 4px;
+}
+
+.dakk-country-field__chevron-sm {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  color: var(--dakk-icon-grey-300);
+}
+
+.dakk-country-field__divider {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: var(--dakk-primary-main);
+  flex-shrink: 0;
+}
+
+.dakk-country-field__input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--dakk-text-white);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.0157em;
+}
+
+.dakk-country-field__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dakk-country-field__chevron-end {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  color: var(--dakk-icon-grey-300);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Native select overlay — invisible but covers the picker for usability */
+.dakk-country-field__native-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: transparent;
+}
+
+.dakk-country-field__native-select:focus {
+  outline: none;
+}
+
+.dakk-country-field__native-select option {
+  color: #000;
+  background: #fff;
+}
+
+.dakk-country-field__native-select--full {
+  /* For the country picker: the entire shell is the trigger */
+}
+
+/* "Choose Country" mode — single value text */
+.dakk-country-field__shell--select {
+  cursor: pointer;
+}
+
+.dakk-country-field__select-text {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.0157em;
+  color: var(--dakk-text-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer */
+.dakk-user-register__footer {
+  /* Solid base + a faint SVG turbulence grain (~7% white) layered on top
+     to give the action bar a subtle tactile texture without competing
+     with the card gradient or buttons. */
+  background-color: var(--dakk-bg-grey);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-repeat: repeat;
+  background-size: 120px 120px;
+  /* 30 px top, 30 px sides, 16 px bottom — keeps the SIGN IN row 16 px
+     above the card's bottom edge. */
+  padding: 30px 30px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dakk-user-register__actions {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Action buttons — Figma `button-medium` token:
+     Bold 14 / 24, horizontal padding 24px, total height 40px.
+   Use the explicit dakk class with high specificity AND lock min/max-height
+   so the base `.airaa-button--medium` (min-height 40px + 12px padding = 48px)
+   cannot inflate the rendered height. */
+.dakk-user-register .airaa-button.dakk-user-register__action-btn {
+  width: 260px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  padding: 8px 24px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.05em;
+  border-radius: var(--dakk-radius);
+  box-sizing: border-box;
+}
+
+.dakk-user-register .airaa-button--outlined-secondary.dakk-user-register__action-btn {
+  background: transparent;
+  border: 1px solid var(--dakk-primary-main);
+  color: var(--dakk-primary-main);
+}
+
+.dakk-user-register .airaa-button--outlined-secondary.dakk-user-register__action-btn:hover {
+  background: rgba(0, 167, 111, 0.08);
+  border-color: var(--dakk-primary-dark);
+  color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register .airaa-button--filled-primary.dakk-user-register__action-btn {
+  background: var(--dakk-primary-main);
+  color: var(--dakk-text-white);
+  border: none;
+}
+
+.dakk-user-register .airaa-button--filled-primary.dakk-user-register__action-btn:hover {
+  background: var(--dakk-primary-dark);
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__signin {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--dakk-text-white);
+  margin: 0;
+  text-align: center;
+}
+
+.dakk-user-register__signin-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-left: 4px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--dakk-text-info);
+  cursor: pointer;
+}
+
+.dakk-user-register__signin-link:hover {
+  text-decoration: underline;
+}

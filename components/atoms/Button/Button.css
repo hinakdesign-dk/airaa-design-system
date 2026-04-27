@@ -3,72 +3,137 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
   font-weight: 500;
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-md, 8px);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  white-space: nowrap;
 }
 
 .airaa-button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* Sizes */
-.airaa-button--sm {
+.airaa-button--small {
   padding: 0.5rem 1rem;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm, 14px);
+  min-height: 32px;
 }
 
-.airaa-button--md {
+.airaa-button--medium {
   padding: 0.75rem 1.5rem;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-base, 16px);
+  min-height: 40px;
 }
 
-.airaa-button--lg {
+.airaa-button--large {
   padding: 1rem 2rem;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-lg, 18px);
+  min-height: 48px;
 }
 
-/* Variants */
-.airaa-button--primary {
-  background-color: var(--color-primary-500);
+/* Filled Default */
+.airaa-button--filled-default {
+  background-color: var(--color-neutral-900, #1a1a1a);
   color: white;
+  border: 1px solid transparent;
 }
 
-.airaa-button--primary:hover:not(:disabled) {
-  background-color: var(--color-primary-600);
+.airaa-button--filled-default:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-neutral-800, #2d2d2d);
 }
 
-.airaa-button--secondary {
-  background-color: var(--color-neutral-200);
-  color: var(--color-neutral-900);
+/* Filled Primary */
+.airaa-button--filled-primary {
+  background-color: var(--color-primary-500, #06b6d4);
+  color: white;
+  border: 1px solid transparent;
 }
 
-.airaa-button--secondary:hover:not(:disabled) {
-  background-color: var(--color-neutral-300);
+.airaa-button--filled-primary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-primary-600, #0891b2);
 }
 
-.airaa-button--outline {
+/* Filled Secondary */
+.airaa-button--filled-secondary {
+  background-color: var(--color-secondary-500, #a855f7);
+  color: white;
+  border: 1px solid transparent;
+}
+
+.airaa-button--filled-secondary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-secondary-600, #9333ea);
+}
+
+/* Outlined Default */
+.airaa-button--outlined-default {
   background-color: transparent;
-  border: 1px solid var(--color-neutral-300);
-  color: var(--color-neutral-900);
+  border: 1px solid var(--color-neutral-900, #1a1a1a);
+  color: var(--color-neutral-900, #1a1a1a);
 }
 
-.airaa-button--outline:hover:not(:disabled) {
-  background-color: var(--color-neutral-50);
+.airaa-button--outlined-default:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-neutral-50, #f9fafb);
 }
 
-.airaa-button--ghost {
+/* Outlined Primary */
+.airaa-button--outlined-primary {
   background-color: transparent;
-  color: var(--color-neutral-700);
+  border: 1px solid var(--color-primary-500, #06b6d4);
+  color: var(--color-primary-500, #06b6d4);
 }
 
-.airaa-button--ghost:hover:not(:disabled) {
-  background-color: var(--color-neutral-100);
+.airaa-button--outlined-primary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-primary-50, #ecfeff);
+}
+
+/* Outlined Secondary */
+.airaa-button--outlined-secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-secondary-500, #a855f7);
+  color: var(--color-secondary-500, #a855f7);
+}
+
+.airaa-button--outlined-secondary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-secondary-50, #faf5ff);
+}
+
+/* Text Default */
+.airaa-button--text-default {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-neutral-900, #1a1a1a);
+}
+
+.airaa-button--text-default:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-neutral-100, #f3f4f6);
+}
+
+/* Text Primary */
+.airaa-button--text-primary {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-primary-500, #06b6d4);
+}
+
+.airaa-button--text-primary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-primary-50, #ecfeff);
+}
+
+/* Text Secondary */
+.airaa-button--text-secondary {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-secondary-500, #a855f7);
+}
+
+.airaa-button--text-secondary:hover:not(:disabled):not(.airaa-button--loading) {
+  background-color: var(--color-secondary-50, #faf5ff);
 }
 
 /* Full width */
@@ -76,13 +141,27 @@
   width: 100%;
 }
 
-/* Loading state */
-.airaa-button--loading {
-  pointer-events: none;
+/* Content wrapper */
+.airaa-button__content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .airaa-button__content--loading {
   opacity: 0;
+}
+
+/* Icon */
+.airaa-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading state */
+.airaa-button--loading {
+  pointer-events: none;
 }
 
 .airaa-button__spinner {
@@ -90,9 +169,28 @@
   width: 1rem;
   height: 1rem;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
+}
+
+/* Adjust spinner color for outlined and text variants */
+.airaa-button--outlined-default .airaa-button__spinner,
+.airaa-button--text-default .airaa-button__spinner {
+  border-color: rgba(26, 26, 26, 0.3);
+  border-top-color: var(--color-neutral-900, #1a1a1a);
+}
+
+.airaa-button--outlined-primary .airaa-button__spinner,
+.airaa-button--text-primary .airaa-button__spinner {
+  border-color: rgba(6, 182, 212, 0.3);
+  border-top-color: var(--color-primary-500, #06b6d4);
+}
+
+.airaa-button--outlined-secondary .airaa-button__spinner,
+.airaa-button--text-secondary .airaa-button__spinner {
+  border-color: rgba(168, 85, 247, 0.3);
+  border-top-color: var(--color-secondary-500, #a855f7);
 }
 
 @keyframes spin {

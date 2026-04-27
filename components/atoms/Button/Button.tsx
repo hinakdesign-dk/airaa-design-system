@@ -2,21 +2,29 @@ import React from 'react';
 import clsx from 'clsx';
 import './Button.css';
 
+export type ButtonStyle = 'filled' | 'outlined' | 'text';
+export type ButtonVariant = 'default' | 'primary' | 'secondary';
+export type ButtonSize = 'small' | 'medium' | 'large';
+
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  style?: ButtonStyle;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   fullWidth?: boolean;
   loading?: boolean;
+  icon?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       children,
-      variant = 'primary',
-      size = 'md',
+      style = 'filled',
+      variant = 'default',
+      size = 'medium',
       fullWidth = false,
       loading = false,
+      icon,
       disabled,
       className,
       ...props
@@ -28,7 +36,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={clsx(
           'airaa-button',
-          `airaa-button--${variant}`,
+          `airaa-button--${style}-${variant}`,
           `airaa-button--${size}`,
           {
             'airaa-button--full-width': fullWidth,
@@ -40,7 +48,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading && <span className="airaa-button__spinner" />}
-        <span className={clsx({ 'airaa-button__content--loading': loading })}>
+        <span className={clsx('airaa-button__content', { 'airaa-button__content--loading': loading })}>
+          {icon && <span className="airaa-button__icon">{icon}</span>}
           {children}
         </span>
       </button>
