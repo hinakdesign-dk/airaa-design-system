@@ -40,18 +40,32 @@
    than the registration form, so the grey-800 card background simply
    shows through the unused vertical space between the heading block
    and the footer band — that empty space is intentional. */
+/* Animated gradient top-color custom property. @property is required so
+   that color values can interpolate smoothly between keyframes; without
+   it CSS would jump between stops instead of fading. */
+@property --dakk-card-gradient-top {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #00150E;
+}
+
 .dakk-user-register__card {
   width: 604px;
   min-height: 730px;
-  /* Linear gradient — #00150E (top) → background/grey-800 (bottom).
+  /* Linear gradient — animated top color → background/grey-800 (bottom).
      The footer band keeps its own solid var(--dakk-bg-grey) background,
      so the gradient is only visible across the card body above the
      footer. */
+  --dakk-card-gradient-top: #00150E;
   background: linear-gradient(
     180deg,
-    #00150E 0%,
+    var(--dakk-card-gradient-top) 0%,
     var(--dakk-bg-grey-800) 100%
   );
+  /* Micro-animation: gently breathe the top color between #00150E and
+     a slightly lifted #003D28 over 9 s, easing both ways and reversing
+     direction so it never snaps. */
+  animation: dakk-card-gradient-breathe 9s ease-in-out infinite alternate;
   border-radius: var(--dakk-radius);
   /* custom/dialog effect tokens */
   box-shadow:
@@ -60,6 +74,22 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+@keyframes dakk-card-gradient-breathe {
+  0% {
+    --dakk-card-gradient-top: #00150E;
+  }
+  100% {
+    --dakk-card-gradient-top: #003D28;
+  }
+}
+
+/* Honor reduced-motion preferences — no animated gradient breathing. */
+@media (prefers-reduced-motion: reduce) {
+  .dakk-user-register__card {
+    animation: none;
+  }
 }
 
 .dakk-user-register__body {
