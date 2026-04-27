@@ -299,15 +299,15 @@
   gap: 16px;
 }
 
+/* Email + Password are both locked to 400 px and horizontally
+   center-aligned to the base card. The success-fields wrapper still
+   spans the full 544 px success-block width, so align-self: center on
+   each field places them at (604 − 400) / 2 = 102 px from each card
+   edge. The forgot-row sibling below keeps its own 30 px left-edge
+   alignment. */
 .dakk-user-register__success-fields .airaa-textfield {
-  width: 100%;
-}
-
-/* Password field is locked to 260 px (half the success-block width)
-   and stays left-aligned with the Email field above it. */
-.dakk-user-register__success-fields .dakk-user-register__success-pwd.airaa-textfield {
-  width: 260px;
-  align-self: flex-start;
+  width: 400px;
+  align-self: center;
 }
 
 /* Forgot password row — single line:
