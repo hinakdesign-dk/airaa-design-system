@@ -226,8 +226,7 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 400;
-  color: var(--dakk-text-white);
-  opacity: 0.85;
+  color: var(--dakk-icon-grey-300);
   margin: 0;
   max-width: 480px;
   margin-left: auto;
