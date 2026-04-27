@@ -64,6 +64,18 @@
   flex: 1 1 auto;
 }
 
+/* For the OTP variant we collapse the body's horizontal padding and let
+   each direct child (logo-row, heading-block, otp-block) declare its
+   own 30 px left/right padding. This makes the 30 px back-button
+   alignment a single, explicit declaration on .dakk-user-register__logo-row
+   rather than something inherited via body padding. The Default
+   registration story keeps its body padding because all of its children
+   share the same 30 px offset. */
+.dakk-user-register--otp .dakk-user-register__body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* DAKK logo */
 .dakk-user-register__logo-row {
   display: flex;
@@ -73,9 +85,10 @@
   position: relative;
 }
 
-/* OTP variant — back button on the left of the DAKK logo */
+/* OTP variant — back button left-aligned to 30 px from the card edge,
+   DAKK logo absolutely centered behind it. */
 .dakk-user-register--otp .dakk-user-register__logo-row {
-  padding: 0;
+  padding: 0 30px;
   justify-content: flex-start;
   align-items: center;
 }
@@ -139,9 +152,13 @@
 }
 
 /* In the OTP variant the spacing below the heading is owned by
-   __otp-block (132 px), so collapse the heading's own bottom margin. */
+   __otp-block (132 px), so collapse the heading's own bottom margin.
+   Body's horizontal padding is zeroed for OTP, so reapply the 30 px
+   offset on the heading-block itself. */
 .dakk-user-register--otp .dakk-user-register__heading-block {
   margin-bottom: 0;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .dakk-user-register__title {
