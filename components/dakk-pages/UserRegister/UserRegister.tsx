@@ -265,7 +265,7 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
                   label="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
+                  className="dakk-user-register__success-pwd"
                 />
               </div>
               <p className="dakk-user-register__forgot-row">

@@ -303,6 +303,13 @@
   width: 100%;
 }
 
+/* Password field is locked to 260 px (half the success-block width)
+   and stays left-aligned with the Email field above it. */
+.dakk-user-register__success-fields .dakk-user-register__success-pwd.airaa-textfield {
+  width: 260px;
+  align-self: flex-start;
+}
+
 /* Forgot password row — single line:
      "Forgot Password or Username? "  → body-2, text/white
      "CLICK TO RESET"                 → overline, text/info */
