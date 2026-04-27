@@ -1,0 +1,446 @@
+/* DAKK Pages — User Register
+ * Tokens used:
+ *   background/grey-800 #1C252E
+ *   background/grey      #141A21
+ *   primary/main         #00A76F
+ *   text/white           #FFFFFF
+ *   icon/grey-300        #DFE3E8
+ *   custom/dialog effect (drop shadows)
+ */
+
+.dakk-user-register {
+  --dakk-bg-grey-800: #1c252e;
+  --dakk-bg-grey: #141a21;
+  --dakk-primary-main: #00a76f;
+  --dakk-primary-dark: #007867;
+  --dakk-text-white: #ffffff;
+  --dakk-text-info: #1f8fff;
+  --dakk-icon-grey-300: #dfe3e8;
+  --dakk-grey-700: #454f5b;
+  --dakk-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #000000;
+  font-family: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.dakk-user-register *,
+.dakk-user-register *::before,
+.dakk-user-register *::after {
+  box-sizing: border-box;
+}
+
+/* Card / dialog */
+.dakk-user-register__card {
+  width: 604px;
+  min-height: 730px;
+  background: var(--dakk-bg-grey-800);
+  border-radius: var(--dakk-radius);
+  /* custom/dialog effect tokens */
+  box-shadow:
+    -40px 40px 80px -8px rgba(0, 0, 0, 0.24),
+    0 0 2px 0 rgba(145, 158, 171, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dakk-user-register__body {
+  padding: 24px 30px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* DAKK logo */
+.dakk-user-register__logo-row {
+  display: flex;
+  justify-content: center;
+  padding: 0 270px;
+  margin-bottom: 64px;
+}
+
+.dakk-user-register__logo {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--dakk-text-white);
+  white-space: nowrap;
+}
+
+.dakk-user-register__logo-accent {
+  color: var(--dakk-primary-main);
+}
+
+/* Heading block */
+.dakk-user-register__heading-block {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.dakk-user-register__title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
+  color: var(--dakk-text-white);
+  margin: 0 0 8px 0;
+  letter-spacing: 0;
+}
+
+.dakk-user-register__subtitle {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--dakk-text-white);
+  opacity: 0.85;
+  margin: 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form fields */
+.dakk-user-register__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dakk-user-register__row {
+  display: grid;
+  grid-template-columns: 260px 260px;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.dakk-user-register__row--single {
+  grid-template-columns: 1fr;
+}
+
+.dakk-user-register__row > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---- Dark theme overrides for atomic components inside this page ---- */
+
+/* Textfield — outlined, dark theme, primary border, 8 px radius
+   (corner-radius token alignment: --border-radius-8) */
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input {
+  background: transparent;
+  color: var(--dakk-text-white);
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+}
+
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register .airaa-textfield--outlined.airaa-textfield--focused .airaa-textfield__input,
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__input:focus {
+  border-color: var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  box-shadow: 0 0 0 1px var(--dakk-primary-main);
+  /* override base CSS that grows padding by 1px on focus and resets radius */
+  padding: 1rem 0.875rem;
+}
+
+.dakk-user-register .airaa-textfield__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dakk-user-register .airaa-textfield__label {
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+}
+
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__label--focused,
+.dakk-user-register .airaa-textfield--outlined .airaa-textfield__label--filled {
+  background: var(--dakk-bg-grey-800);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0 4px;
+}
+
+.dakk-user-register .airaa-textfield--outlined.airaa-textfield--focused .airaa-textfield__label {
+  color: var(--dakk-primary-main);
+}
+
+/* Disable the global ".airaa-textfield:hover .airaa-textfield__label"
+   rule which forces the label to neutral-900 (renders ~text/white in dark mode). */
+.dakk-user-register .airaa-textfield:not(.airaa-textfield--disabled):hover .airaa-textfield__label {
+  color: rgba(255, 255, 255, 0.7);
+}
+.dakk-user-register .airaa-textfield:not(.airaa-textfield--disabled):hover .airaa-textfield__label--focused {
+  color: var(--dakk-primary-main);
+}
+
+/* Eye / password toggle — primary token, hover stays primary-dark (NOT white) */
+.dakk-user-register .airaa-textfield__password-toggle {
+  color: var(--dakk-primary-main);
+  opacity: 1;
+}
+.dakk-user-register .airaa-textfield__password-toggle:hover {
+  color: var(--dakk-primary-dark);
+}
+
+/* Date of Birth — calendar icon */
+.dakk-user-register__cal-icon {
+  display: inline-flex;
+  color: var(--dakk-primary-main);
+  pointer-events: none;
+}
+
+
+/* ---- Custom Country / Phone field (rebuilt to match Figma 3111:3565) ---- */
+.dakk-country-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dakk-country-field__label {
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  z-index: 2;
+  padding: 0 4px;
+  background: var(--dakk-bg-grey-800);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+}
+
+.dakk-country-field__shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 12px 16px;
+  border: 1px solid var(--dakk-primary-main);
+  border-radius: var(--dakk-radius);
+  background: transparent;
+  transition: border-color 0.2s ease;
+}
+
+.dakk-country-field__shell:hover {
+  border-color: var(--dakk-primary-dark);
+}
+
+.dakk-country-field__shell:focus-within {
+  border-color: var(--dakk-primary-main);
+  box-shadow: 0 0 0 1px var(--dakk-primary-main);
+}
+
+.dakk-country-field__flag-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dakk-country-field__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 16px;
+  font-size: 18px;
+  line-height: 1;
+  overflow: hidden;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dakk-country-field__flag--lead {
+  margin-right: 4px;
+}
+
+.dakk-country-field__chevron-sm {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  color: var(--dakk-icon-grey-300);
+}
+
+.dakk-country-field__divider {
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: var(--dakk-primary-main);
+  flex-shrink: 0;
+}
+
+.dakk-country-field__input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--dakk-text-white);
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.0157em;
+}
+
+.dakk-country-field__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.dakk-country-field__chevron-end {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  color: var(--dakk-icon-grey-300);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Native select overlay — invisible but covers the picker for usability */
+.dakk-country-field__native-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: transparent;
+}
+
+.dakk-country-field__native-select:focus {
+  outline: none;
+}
+
+.dakk-country-field__native-select option {
+  color: #000;
+  background: #fff;
+}
+
+.dakk-country-field__native-select--full {
+  /* For the country picker: the entire shell is the trigger */
+}
+
+/* "Choose Country" mode — single value text */
+.dakk-country-field__shell--select {
+  cursor: pointer;
+}
+
+.dakk-country-field__select-text {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.0157em;
+  color: var(--dakk-text-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer */
+.dakk-user-register__footer {
+  background: var(--dakk-bg-grey);
+  padding: 30px 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dakk-user-register__actions {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Action buttons — Figma `button-medium` token:
+     Bold 14 / 24, horizontal padding 24px, total height 40px.
+   Use the explicit dakk class with high specificity AND lock min/max-height
+   so the base `.airaa-button--medium` (min-height 40px + 12px padding = 48px)
+   cannot inflate the rendered height. */
+.dakk-user-register .airaa-button.dakk-user-register__action-btn {
+  width: 260px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  padding: 8px 24px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.05em;
+  border-radius: var(--dakk-radius);
+  box-sizing: border-box;
+}
+
+.dakk-user-register .airaa-button--outlined-secondary.dakk-user-register__action-btn {
+  background: transparent;
+  border: 1px solid var(--dakk-primary-main);
+  color: var(--dakk-primary-main);
+}
+
+.dakk-user-register .airaa-button--outlined-secondary.dakk-user-register__action-btn:hover {
+  background: rgba(0, 167, 111, 0.08);
+  border-color: var(--dakk-primary-dark);
+  color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register .airaa-button--filled-primary.dakk-user-register__action-btn {
+  background: var(--dakk-primary-main);
+  color: var(--dakk-text-white);
+  border: none;
+}
+
+.dakk-user-register .airaa-button--filled-primary.dakk-user-register__action-btn:hover {
+  background: var(--dakk-primary-dark);
+  color: var(--dakk-text-white);
+}
+
+.dakk-user-register__signin {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--dakk-text-white);
+  margin: 0;
+  text-align: center;
+}
+
+.dakk-user-register__signin-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-left: 4px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--dakk-text-info);
+  cursor: pointer;
+}
+
+.dakk-user-register__signin-link:hover {
+  text-decoration: underline;
+}
