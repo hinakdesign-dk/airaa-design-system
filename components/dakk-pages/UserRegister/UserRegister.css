@@ -310,11 +310,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   margin: 16px 0 0;
   padding: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .dakk-user-register__forgot-text {
