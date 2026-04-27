@@ -312,14 +312,20 @@
 
 /* Forgot password row — single line:
      "Forgot Password or Username? "  → body-2, text/white
-     "CLICK TO RESET"                 → overline, text/info */
+     "CLICK TO RESET"                 → overline, text/info
+
+   Aligned to the Password textfield: same 400 px width and
+   align-self: center as the field above, with internal content
+   left-aligned. 12 px sits between the Password field and this row. */
 .dakk-user-register__forgot-row {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: flex-start;
   gap: 6px;
-  margin: 16px 0 0;
+  width: 400px;
+  align-self: center;
+  margin: 12px 0 0;
   padding: 0;
   text-align: left;
 }
