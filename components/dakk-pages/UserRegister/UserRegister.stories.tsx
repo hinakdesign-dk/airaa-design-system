@@ -74,3 +74,20 @@ export const SuccessVerification: Story = {
     },
   },
 };
+
+export const EmailBodyTemplate: Story = {
+  name: 'Email Body Template',
+  args: {
+    variant: 'email-body',
+    emailBodyCode: '123456',
+    onCopyCode: (code) => console.log('Copy code clicked', code),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Email Body Template variant of the DAKK User Register page — represents the visual contents of the verification email itself (no footer, no back button, no SIGN IN row). Reuses the 604 × 730 animated-gradient card shell and DAKK header from the other stories. Body layout (all centered): heading "Verify your Email" + description, 50 px gap, "Copy Code" text-button with copy icon, 16 px gap, 6 read-only OTP boxes pre-filled with the code (defaults to 1 2 3 4 5 6), 24 px gap, disclaimer body-2 paragraph in icon/grey-300.',
+      },
+    },
+  },
+};

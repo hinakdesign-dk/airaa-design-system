@@ -73,7 +73,35 @@ const backArrowIcon = (
   </svg>
 );
 
-export type UserRegisterVariant = 'register' | 'otp' | 'success';
+const copyIcon = (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <rect
+      x="5.25"
+      y="5.25"
+      width="8.5"
+      height="8.5"
+      rx="1.5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M3.5 10.5V3.75A1.25 1.25 0 0 1 4.75 2.5h6.75"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export type UserRegisterVariant = 'register' | 'otp' | 'success' | 'email-body';
 
 export interface UserRegisterProps {
   variant?: UserRegisterVariant;
@@ -89,6 +117,10 @@ export interface UserRegisterProps {
   onResetPassword?: () => void;
   /** Success variant — "Need a new account? REGISTER" link */
   onRegisterRedirect?: () => void;
+  /** Email-body variant — pre-filled OTP code rendered in the 6 read-only boxes */
+  emailBodyCode?: string;
+  /** Email-body variant — "Copy Code" text-button */
+  onCopyCode?: (code: string) => void;
   className?: string;
 }
 
@@ -116,11 +148,16 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
   onGoToDashboard,
   onResetPassword,
   onRegisterRedirect,
+  emailBodyCode,
+  onCopyCode,
   className,
 }) => {
   const isOtp = variant === 'otp';
   const isSuccess = variant === 'success';
+  const isEmailBody = variant === 'email-body';
   const showBackButton = isOtp || isSuccess;
+  const showFooter = !isEmailBody;
+  const emailBodyDigits = (emailBodyCode ?? '123456').padEnd(6, ' ').slice(0, 6).split('');
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -234,20 +271,54 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
             <h1 className="dakk-user-register__title">
               {isSuccess
                 ? 'Congratulations! You are all set'
-                : isOtp
+                : isOtp || isEmailBody
                   ? 'Verify your Email'
                   : 'Register to Begin'}
             </h1>
             <p className="dakk-user-register__subtitle">
               {isSuccess
                 ? 'To start exploring, Login using your credentials'
-                : isOtp
-                  ? 'Enter the 6-digit code to complete process of account creation'
-                  : "Create your account, choose your LLM provider, and you're ready to use DAKK Assistant"}
+                : isEmailBody
+                  ? '6-digit code to complete the process of account creation'
+                  : isOtp
+                    ? 'Enter the 6-digit code to complete process of account creation'
+                    : "Create your account, choose your LLM provider, and you're ready to use DAKK Assistant"}
             </p>
           </div>
 
-          {isSuccess ? (
+          {isEmailBody ? (
+            <div className="dakk-user-register__email-body-block">
+              <button
+                type="button"
+                className="dakk-user-register__copy-code-btn"
+                onClick={() => onCopyCode?.(emailBodyDigits.join('').trim())}
+              >
+                <span className="dakk-user-register__copy-code-text">Copy Code</span>
+                <span className="dakk-user-register__copy-code-icon">{copyIcon}</span>
+              </button>
+              <div
+                className="dakk-user-register__otp-field dakk-user-register__email-otp-field"
+                role="group"
+                aria-label={`One-time code, 6 digits: ${emailBodyDigits.join(' ').trim()}`}
+              >
+                {emailBodyDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    className="dakk-user-register__otp-input"
+                    value={digit.trim()}
+                    readOnly
+                    tabIndex={-1}
+                    aria-label={`Digit ${index + 1} of 6`}
+                  />
+                ))}
+              </div>
+              <p className="dakk-user-register__email-disclaimer">
+                This code is valid for 10 minutes. If you didn&apos;t request it,
+                please ignore this email and do not share the code with anyone.
+              </p>
+            </div>
+          ) : isSuccess ? (
             <div className="dakk-user-register__success-block">
               <div className="dakk-user-register__success-fields">
                 <Textfield
@@ -447,39 +518,41 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
           )}
         </div>
 
-        <div className="dakk-user-register__footer">
-          <div className="dakk-user-register__actions">
-            <Button
-              type="button"
-              style="outlined"
-              variant="secondary"
-              size="medium"
-              className="dakk-user-register__action-btn"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              style="filled"
-              variant="primary"
-              size="medium"
-              className="dakk-user-register__action-btn"
-            >
-              {isSuccess ? 'Go To Dashboard' : isOtp ? 'Verify' : 'Register'}
-            </Button>
+        {showFooter && (
+          <div className="dakk-user-register__footer">
+            <div className="dakk-user-register__actions">
+              <Button
+                type="button"
+                style="outlined"
+                variant="secondary"
+                size="medium"
+                className="dakk-user-register__action-btn"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                style="filled"
+                variant="primary"
+                size="medium"
+                className="dakk-user-register__action-btn"
+              >
+                {isSuccess ? 'Go To Dashboard' : isOtp ? 'Verify' : 'Register'}
+              </Button>
+            </div>
+            <p className="dakk-user-register__signin">
+              {isSuccess ? 'Need a new account?' : 'Already have an account?'}{' '}
+              <button
+                type="button"
+                className="dakk-user-register__signin-link"
+                onClick={isSuccess ? onRegisterRedirect : onSignIn}
+              >
+                {isSuccess ? 'REGISTER' : 'SIGN IN'}
+              </button>
+            </p>
           </div>
-          <p className="dakk-user-register__signin">
-            {isSuccess ? 'Need a new account?' : 'Already have an account?'}{' '}
-            <button
-              type="button"
-              className="dakk-user-register__signin-link"
-              onClick={isSuccess ? onRegisterRedirect : onSignIn}
-            >
-              {isSuccess ? 'REGISTER' : 'SIGN IN'}
-            </button>
-          </p>
-        </div>
+        )}
       </form>
     </div>
   );

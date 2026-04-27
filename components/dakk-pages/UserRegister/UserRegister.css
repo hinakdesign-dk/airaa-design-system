@@ -211,6 +211,13 @@
   padding-right: 30px;
 }
 
+/* Email-body variant — heading still uses the default body padding so
+   we only need to collapse the bottom margin (the 50 px gap below is
+   owned by __email-body-block's padding-top). */
+.dakk-user-register--email-body .dakk-user-register__heading-block {
+  margin-bottom: 0;
+}
+
 .dakk-user-register__title {
   font-family: 'Public Sans', sans-serif;
   font-size: 24px;
@@ -394,6 +401,89 @@
 .dakk-user-register__forgot-link:hover {
   color: var(--dakk-text-info);
   text-decoration: underline;
+}
+
+/* ───────── Email Body Template variant ─────────
+   Layout under the heading-block:
+     50 px (padding-top) → "Copy Code" text-button
+     16 px (gap)         → 6 read-only OTP boxes (pre-filled 1..6)
+     24 px (gap)         → disclaimer body-2 paragraph
+
+   No footer band on this variant. The card body's flex: 1 1 auto
+   absorbs the rest of the 730 px so the gradient simply fills the
+   space below the disclaimer. */
+.dakk-user-register__email-body-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  gap: 16px;
+  width: 544px;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* "Copy Code" text-button — borderless, primary-main with icon. Sits
+   above the OTP boxes; hover deepens to primary-dark. */
+.dakk-user-register__copy-code-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--dakk-primary-main);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.dakk-user-register__copy-code-btn:hover {
+  color: var(--dakk-primary-dark);
+}
+
+.dakk-user-register__copy-code-icon {
+  display: inline-flex;
+  align-items: center;
+  color: currentColor;
+}
+
+/* Email-body OTP grid — same 6-box look as OTP Verify story. The
+   __email-otp-field modifier reserves the option to diverge later if
+   needed (e.g. read-only visual styling) without touching __otp-field. */
+.dakk-user-register__email-otp-field {
+  margin-top: 0;
+}
+
+.dakk-user-register__email-otp-field .dakk-user-register__otp-input {
+  caret-color: transparent;
+  cursor: default;
+}
+
+.dakk-user-register__email-otp-field .dakk-user-register__otp-input:focus {
+  /* Read-only digits — no focus ring */
+  box-shadow: none;
+}
+
+/* Disclaimer paragraph — body-2, icon/grey-300, ~480 px wide so the
+   two-line break feels intentional. Sits 24 px below the OTP boxes
+   (overrides the email-body-block's 16 px gap via margin-top). */
+.dakk-user-register__email-disclaimer {
+  margin: 8px 0 0; /* 16 px gap (block gap) + 8 px (this margin-top) = 24 px */
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--dakk-icon-grey-300);
+  max-width: 480px;
+  text-align: center;
 }
 
 /* Form fields */
