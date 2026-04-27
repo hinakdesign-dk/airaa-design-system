@@ -54,9 +54,34 @@ const calendarIcon = (
   </svg>
 );
 
+const backArrowIcon = (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M10 12L6 8L10 4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export type UserRegisterVariant = 'register' | 'otp';
+
 export interface UserRegisterProps {
+  variant?: UserRegisterVariant;
+  email?: string;
   onCancel?: () => void;
   onRegister?: (data: UserRegisterFormData) => void;
+  onVerify?: (otp: string) => void;
+  onBack?: () => void;
   onSignIn?: () => void;
   className?: string;
 }
@@ -75,11 +100,17 @@ export interface UserRegisterFormData {
 }
 
 export const UserRegister: React.FC<UserRegisterProps> = ({
+  variant = 'register',
+  email: emailProp,
   onCancel,
   onRegister,
+  onVerify,
+  onBack,
   onSignIn,
   className,
 }) => {
+  const isOtp = variant === 'otp';
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
@@ -87,15 +118,20 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
   const [phoneCountry, setPhoneCountry] = useState<string>('es');
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState<string>('es');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(emailProp ?? '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [otp, setOtp] = useState('');
 
   const phoneCountryEntry = COUNTRY_LIST.find((c) => c.value === phoneCountry) ?? COUNTRY_LIST[0];
   const countryEntry = COUNTRY_LIST.find((c) => c.value === country) ?? COUNTRY_LIST[0];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isOtp) {
+      onVerify?.(otp);
+      return;
+    }
     onRegister?.({
       firstName,
       lastName,
@@ -111,23 +147,57 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
   };
 
   return (
-    <div className={`dakk-user-register ${className ?? ''}`}>
+    <div
+      className={`dakk-user-register dakk-user-register--${variant} ${className ?? ''}`}
+    >
       <form className="dakk-user-register__card" onSubmit={handleSubmit}>
         <div className="dakk-user-register__body">
           <div className="dakk-user-register__logo-row">
+            {isOtp && (
+              <button
+                type="button"
+                className="dakk-user-register__back-btn"
+                onClick={onBack}
+                aria-label="Go back"
+              >
+                <span className="dakk-user-register__back-btn-icon">{backArrowIcon}</span>
+                <span className="dakk-user-register__back-btn-text">Back</span>
+              </button>
+            )}
             <span className="dakk-user-register__logo">
               D<span className="dakk-user-register__logo-accent">A</span>KK
             </span>
           </div>
 
           <div className="dakk-user-register__heading-block">
-            <h1 className="dakk-user-register__title">Register to Begin</h1>
+            <h1 className="dakk-user-register__title">
+              {isOtp ? 'Verify your Email' : 'Register to Begin'}
+            </h1>
             <p className="dakk-user-register__subtitle">
-              Create your account, choose your LLM provider, and you&apos;re ready to use DAKK Assistant
+              {isOtp
+                ? 'Enter the 6-digit code to complete process of account creation'
+                : "Create your account, choose your LLM provider, and you're ready to use DAKK Assistant"}
             </p>
           </div>
 
-          <div className="dakk-user-register__fields">
+          {isOtp ? (
+            <div className="dakk-user-register__otp-block">
+              <p className="dakk-user-register__otp-sent-to">
+                Code was sent to {emailProp ?? 'hina.life@gmail.com'}
+              </p>
+              <div className="dakk-user-register__otp-field">
+                <Textfield
+                  type="outlined"
+                  variant="otp"
+                  size="normal"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  aria-label="One-time code"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="dakk-user-register__fields">
             <div className="dakk-user-register__row">
               <Textfield
                 type="outlined"
@@ -259,6 +329,7 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
               />
             </div>
           </div>
+          )}
         </div>
 
         <div className="dakk-user-register__footer">
@@ -280,7 +351,7 @@ export const UserRegister: React.FC<UserRegisterProps> = ({
               size="medium"
               className="dakk-user-register__action-btn"
             >
-              Register
+              {isOtp ? 'Verify' : 'Register'}
             </Button>
           </div>
           <p className="dakk-user-register__signin">

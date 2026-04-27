@@ -28,8 +28,29 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    variant: 'register',
     onCancel: () => console.log('Cancel clicked'),
     onRegister: (data) => console.log('Register submitted', data),
     onSignIn: () => console.log('Sign in clicked'),
+  },
+};
+
+export const OTPVerify: Story = {
+  name: 'OTP Verify',
+  args: {
+    variant: 'otp',
+    email: 'hina.life@gmail.com',
+    onCancel: () => console.log('Cancel clicked'),
+    onVerify: (otp) => console.log('Verify submitted', otp),
+    onBack: () => console.log('Back clicked'),
+    onSignIn: () => console.log('Sign in clicked'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'OTP Verify state of the User Register page. Reuses the same dialog shell as the Default story, replacing the form fields with a single 6-digit OTP textfield. Adds a back button to the left of the DAKK wordmark, and renames the primary footer button from "Register" to "Verify".',
+      },
+    },
   },
 };
